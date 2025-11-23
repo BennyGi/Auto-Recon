@@ -26,6 +26,29 @@ def main():
         f.write(whois_output)
 
     print("[+] WHOIS saved to results/" + domain + "/whois.txt")
+    
+
+    # DNS/DIG
+    print("[+] Running DIG...")
+    dns_output = run_cmd(f"dig{domain} ANY+noidnout")
+
+      # Saving the file
+    with open(f"{outdir}/dns.txt, "w") as f:
+        f.write(dns_output)
+    print("[+] DNS saved to results.")
+
+
+    # NMAP
+    print("[+] Running NMAP...")
+    nmap_output = run_cmd(f"nmap -sV --min-rate 500 {domain}")
+
+    
+    # Saving the file
+    with open(f"{outdir}/nmap.txt", "w") as f:
+        f.write(nmap_output)
+
+    print("[+] NMAP saved to results/" + domain + "/nmap.txt")
+
 
 if __name__ == "__main__":
     main()
