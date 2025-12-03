@@ -13,7 +13,7 @@ You give it a domain → it runs recon (subdomains, ports, tech stack, screensho
 
 ## 🔧 What B-Recon Can Do
 
-### 1. Classic CLI Recon (`cli.py` – without AI)
+### 1. Classic CLI Recon (`cli.py` - without AI)
 
 This is the original part of the project.
 
@@ -360,4 +360,3 @@ Only run recon on:
     Domains where you have clear permission to test.
 
 Random scanning on the internet can get you blocked, shouted at, or worse.
-Use B-Recon like a good hacker 💻🧠
