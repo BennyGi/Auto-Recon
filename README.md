@@ -1,168 +1,140 @@
-# B-Recon 🔍  
-Auto Recon Toolkit + AI Chat Assistant
+🚀 B-Recon
+AI-Powered Reconnaissance Toolkit (CLI + Web Chat Assistant)
 
-B-Recon started as a simple Python recon script (`cli.py`) and grew into a more serious tool:
+B-Recon began as a simple Python recon script and evolved into a complete recon platform:
 
-- A **classic CLI recon** pipeline (no AI, just Python + external tools).
-- A **web-based AI chat** that sits on top of the recon engine and explains results like a “security GPT”.
+✅ Classic CLI Recon (fast, scriptable, no AI required)
 
-The flow is simple:  
-You give it a domain → it runs recon (subdomains, ports, tech stack, screenshots, reports) → the AI helps you understand what you got.
+🤖 AI Web Chat Assistant (FastAPI + Ollama) that explains results like a “Security GPT”
 
----
+Give it a domain → it performs full recon → the AI interprets the results for you.
 
-## 🔧 What B-Recon Can Do
+🔎 Features
+1. Classic Recon CLI (cli.py)
 
-### 1. Classic CLI Recon (`cli.py` - without AI)
+A fully automated recon pipeline:
 
-This is the original part of the project.
+🌐 Subdomain enumeration
 
-From the terminal you can:
+🔎 Deep subdomain brute force
 
-- Run a **full recon pipeline** on a domain.
-- Enumerate **subdomains** and **deep subdomains**.
-- Pull **CT logs** (certificate transparency).
-- Detect **technologies** used by the target.
-- Run a **port scan** and save results as JSON.
-- Scrape **emails** from interesting endpoints.
-- Take **screenshots** of discovered assets.
-- Generate reports:
-  - Technical markdown report → `report.md`
-  - Executive / human summary → `executive_summary.txt`
-  - HTML report → `report.html`
+🔏 Certificate Transparency (CT) logs
 
-Results are saved under:
+🧠 Tech stack fingerprinting
 
-```text
+🔢 Port scanning
+
+📧 Email scraping
+
+📸 Screenshots (optional)
+
+📄 Report generation:
+
+Technical (report.md)
+
+Executive summary (executive_summary.txt)
+
+HTML report (report.html)
+
+Results saved under:
+
 autorecon-results/<domain>/
-
-for example:
-
-autorecon-results/tesla.com/
 
 2. B-Recon AI Chat (FastAPI + Ollama)
 
-On top of the recon engine there is a web chat UI with an AI assistant:
+A modern web chat interface that:
 
-    Modern chat-style interface (bubbles, avatars, typing indicator).
+Talks to an LLM via Ollama
 
-    Connects to a local LLM via Ollama (for example llama3.2:1b).
+Parses natural commands like:
 
-    Understands natural language commands like:
+“Do a full recon on tesla.com”
 
-        Do a full recon on tesla.com
+“Explain port 3389”
 
-        Scan subdomains of paypal.com
+Decides autonomously:
 
-        What does an open 3389 port mean?
+When to run a real scan
 
-    Decides when to:
+When to answer from knowledge
 
-        Actually run a scan, or
+Reads recon output files and explains them like a cybersecurity analyst
 
-        Just answer your question from knowledge.
+Shows live scan progress
 
-    Reads recon output (JSON + text) and gives you a human explanation.
+Provides download links for reports
 
-During long scans, the chat shows a live progress panel, for example:
+Live progress example:
 
-    Step 1/8: Subdomains scan started
+Step 1/8: Subdomains scan started
+Step 2/8: Deep subdomains scan...
+...
+FULL recon pipeline completed successfully
 
-    Step 1/8: Subdomains scan finished
-
-    Step 2/8: Deep subdomains scan started
-
-    ...
-
-    FULL recon pipeline completed successfully
-
-After a full scan, B-Recon can:
-
-    Summarize:
-
-        Key subdomains
-
-        Open ports & services
-
-        Technologies and stack
-
-        Emails (if found)
-
-        Interesting notes / potential risk areas
-
-    Offer download links (via the API) for:
-
-        Technical report (report.md)
-
-        Human summary (executive_summary.txt)
-
-🗂 Project Structure (high level)
-
-Rough layout (names may be slightly different on your machine):
-
+🗂 Project Structure
 .
 ├── autorecon/
-│   ├── cli.py               # Original CLI recon entrypoint (no AI)
-│   ├── ...                  # Subdomain / ports / screenshots / reports helpers
-├── ai_agent.py              # Logic for calling the LLM (Ollama) + summarizing results
+│   ├── cli.py               # Classic recon pipeline
+│   ├── ...                  # Subdomain/ports/tech/screenshot modules
+├── ai_agent.py              # LLM logic + intent detection + report explanations
 ├── api/
-│   ├── ask_ai.py            # FastAPI app: /ai, /chat, /progress, /download...
+│   ├── ask_ai.py            # FastAPI backend (AI, progress, downloads)
 ├── templates/
-│   ├── chat.html            # B-Recon web chat UI (HTML + inline JS/CSS)
-├── autorecon-results/       # Scan output (subdomains, ports, reports, screenshots, etc.)
+│   ├── chat.html            # Web chat UI (HTML + inline JS/CSS)
+├── autorecon-results/       # All scan output (per domain)
 ├── requirements.txt
 ├── commands.txt
 └── README.md
 
-📦 Requirements (short version)
+📦 Requirements
+System
 
-    Full list is in requirements.txt, this is just the idea.
+Linux (tested on Kali)
 
-System:
+Python 3.11+
 
-    Linux environment (developed and tested on Kali).
+External tools:
 
-    Python 3.11+ recommended.
+nmap
 
-    Typical recon tools installed, for example:
+ffuf
 
-        nmap
+curl, wget
 
-        ffuf
+Optional
 
-        curl, wget
+Playwright / Chromium for screenshots
 
-    For technologies / screenshots you may need a headless browser setup
-    (e.g. Playwright / Chromium), depending on how you configure it.
+Headless browser environment
 
-Python (core libraries):
+Python packages
 
-    fastapi, uvicorn
+(Full list in requirements.txt)
 
-    pydantic
+fastapi, uvicorn
 
-    requests
+requests
 
-    tqdm
+tqdm
 
-    ollama
+ollama
 
-    jinja2 (for templates, if used)
+jinja2
 
-LLM / Ollama:
+pydantic
 
-    Ollama
+LLM
 
-    running locally.
+Install Ollama
 
-    A model pulled, for example:
+Pull a model:
 
 ollama pull llama3.2:1b
 
-Make sure the model name inside ai_agent.py matches what you actually pulled.
-🚀 Getting Started
-1. Clone & Setup
 
+Make sure the model name matches the one in ai_agent.py.
+
+⚙️ Installation
 git clone <your-repo-url> b-recon
 cd b-recon
 
@@ -171,192 +143,128 @@ source venv/bin/activate
 
 pip install -r requirements.txt
 
-Install the external tools you need, for example (Debian / Kali):
+
+Install required tools:
 
 sudo apt update
 sudo apt install -y nmap ffuf
 
-Start Ollama and pull the model:
 
-ollama serve        # if needed
-ollama pull llama3.2:1b
+Start Ollama:
 
-🖥️ Using the Classic CLI (cli.py)
+ollama serve
 
-Run from inside the repo (with the virtualenv activated).
-
-Full recon example:
-
+🖥️ Using the Classic CLI
+Full recon
 python autorecon/cli.py full tesla.com
 
-This will:
-
-    Enumerate subdomains
-
-    Deep-scan subdomains
-
-    Pull CT logs
-
-    Detect technologies
-
-    Scrape emails
-
-    Run a port scan
-
-    Take screenshots (if enabled)
-
-    Generate reports
-
-Result folder example:
-
-autorecon-results/tesla.com/
-  ├── subdomains...
-  ├── deep_subdomains_found.txt
-  ├── ports.json
-  ├── technologies.json
-  ├── emails_found.txt
-  ├── screenshots/
-  ├── report.md
-  ├── executive_summary.txt
-  └── report.html
-
-Depending on how cli.py is implemented, you might also have commands like:
-
-# Only subdomains
+Only subdomains
 python autorecon/cli.py subdomains tesla.com
 
-# Only port scan
+Only ports
 python autorecon/cli.py ports tesla.com
 
-# Only screenshots
-python autorecon/cli.py screenshots tesla.com
-
-# Help
+Help
 python autorecon/cli.py -h
 
-💬 Using the B-Recon AI Chat
-
-    Run the FastAPI app
-
+💬 Using the AI Chat Interface
+Start the backend
 uvicorn api.ask_ai:app --host 0.0.0.0 --port 8000 --reload
 
-    Open the chat UI in your browser
-
+Open the chat UI
 http://127.0.0.1:8000/chat/
 
-You’ll see:
+Try example prompts:
 
-    Chat bubbles (You / B-Recon).
+Do a full recon on tesla.com
 
-    Status indicator (“API: online”).
+Scan subdomains of paypal.com
 
-    Small hints with example prompts.
+What does an open 3389 port mean?
 
-    Example prompts
+Explain the last scan
 
-Inside the chat, try:
+📥 Downloading Reports
 
-    Do a full recon on tesla.com
+After a full scan, the AI sends links for:
 
-    Scan subdomains of paypal.com
+Technical report
 
-    What does an open 3389 port mean?
+Human summary
 
-    Explain the last scan on tesla.com
+Endpoints:
 
-If B-Recon decides this is a long scan, it will:
+/download/report?domain=<domain>
+/download/summary?domain=<domain>
 
-    Kick off the recon pipeline for that domain.
+🧠 Internal Architecture (High-Level)
+autorecon/cli.py
 
-    Show a scrolling “progress bubble” (using /progress?domain=...).
+Handles the classic scan steps:
 
-    When done, read the JSON/text results and answer in plain language.
+Subdomains
 
-📥 Downloading Reports from the Chat
+Deep subdomains
 
-After a full recon, B-Recon can offer download links (for example):
+CT logs
 
-    Technical report (report.md)
+Tech detection
 
-    Human summary (executive_summary.txt)
+Ports
 
-These are usually exposed as endpoints like:
+Emails
 
-/download/report?domain=tesla.com
-/download/summary?domain=tesla.com
+Screenshots
 
-Opening these URLs in your browser will download the files to your machine.
-🧠 How It’s Wired (High-Level)
+Reports
 
-    autorecon/cli.py
-    Orchestrates the classic recon steps:
+ai_agent.py
 
-        scan_subdomains
+Talks to the LLM using Ollama
 
-        scan_deep_subdomains
+Detects intent (“scan”, “explain”, “ask”)
 
-        scan_ct_logs
+Runs recon when needed
 
-        detect_technologies
+Reads results + creates explanations
 
-        email_scraper
+api/ask_ai.py
 
-        run_port_scan
+FastAPI handles:
 
-        screenshot_all
+/ai — main AI endpoint
 
-        generate_report, generate_human_summary, generate_html_report
+/progress — live scan updates
 
-    ai_agent.py
+/download/... — report downloads
 
-        Talks to Ollama (LLM).
+/chat/ — UI template
 
-        Detects intent from natural language.
+templates/chat.html
 
-        On scan-related questions:
+Frontend UI:
 
-            Triggers the recon flow (via CLI / internal calls).
+Chat bubbles
 
-            Reads the output files.
+Typing indicator
 
-            Builds a human-readable summary.
+Live progress
 
-    api/ask_ai.py
+Auto-scroll
 
-        FastAPI app exposing:
-
-            /ai?question=... – main AI endpoint.
-
-            /chat/ – serves the web UI.
-
-            /progress?domain=... – used by the front-end to show live progress.
-
-            /download/... – endpoints for reports.
-
-    templates/chat.html
-
-        The HTML/JS/CSS for the chat interface.
-
-        Handles:
-
-            Sending messages to /ai
-
-            Rendering messages as chat bubbles
-
-            Polling /progress during scans
-
-            Auto-scrolling, typing indicator, etc.
+API connectivity indicator
 
 ⚠️ Disclaimer
 
-This is a personal / learning project, not a fully hardened production scanner.
+This tool is for educational and authorized security testing only.
+Do not use it on domains you do not own or do not have permission to scan.
 
-You are responsible for how you use it.
+Unauthorized scanning can result in:
 
-Only run recon on:
+IP bans
 
-    Domains you own, or
+Abuse reports
 
-    Domains where you have clear permission to test.
+Legal issues
 
-Random scanning on the internet can get you blocked, shouted at, or worse.
+Use responsibly.
